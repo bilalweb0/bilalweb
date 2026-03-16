@@ -1,7 +1,10 @@
-window.addEventListener('load', () => {
-    const loader = document.getElementById('loader-wrapper');
+// Initialize EmailJS with your public key
+emailjs.init('Zj_yJMKm7FpZ0qafw'); // To'g'ri public key
 
-    // 2.5 sekunddan keyin spinnerni o'chirish
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader-wrapper');   
+
+    // Hide loader after 2.5 seconds
     setTimeout(() => {
         loader.style.opacity = '0';
         
@@ -9,9 +12,20 @@ window.addEventListener('load', () => {
         setTimeout(() => {
             loader.style.display = 'none';
         }, 500); 
-    }, 500); // 2500ms = 2.5 sekund
+    }, 2500);
 });
-// Sahifa yuklanganda elementlarning sekin chiqib kelishi
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Intersection Observer for card animations
 document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card');
     
@@ -23,21 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, { threshold: 0.1 });
-const menu = document.querySelector('#mobile-menu');
-const menuLinks = document.querySelector('.nav-links');
 
-// Burger tugmani bosganda menyuni chiqarish
-menu.addEventListener('click', () => {
-    menuLinks.classList.toggle('active');
-    
-    // Burger animatsiyasi (tugmani X shakliga keltirish)
-    menu.classList.toggle('is-active');
-});
-
-// Menyu ichidagi link bosilganda menyuni yopish
-document.querySelectorAll('.nav-links a').forEach(n => n.addEventListener('click', () => {
-    menuLinks.classList.remove('active');
-}));
     cards.forEach(card => {
         card.style.opacity = 0;
         card.style.transform = 'translateY(50px)';
@@ -45,7 +45,117 @@ document.querySelectorAll('.nav-links a').forEach(n => n.addEventListener('click
         observer.observe(card);
     });
 
-    console.log("Gojo, saytingiz muvaffaqiyatli yuklandi!");
+    // Mobile menu toggle
+    const menu = document.querySelector('#mobile-menu');
+    const menuLinks = document.querySelector('.nav-links');
+
+    menu.addEventListener('click', () => {
+        menuLinks.classList.toggle('active');
+        menu.classList.toggle('is-active');
+    });
+
+    // Close menu when link is clicked
+    document.querySelectorAll('.nav-links a').forEach(n => n.addEventListener('click', () => {
+        menuLinks.classList.remove('active');
+        menu.classList.remove('is-active');
+    }));
+
+    // Dark mode toggle
+    const themeBtn = document.createElement('button');
+    themeBtn.id = "theme-toggle";
+    themeBtn.innerText = "🌙";
+    const li = document.createElement('li');
+    li.appendChild(themeBtn);
+    document.querySelector('.nav-links').appendChild(li);
+
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        themeBtn.innerText = document.body.classList.contains('light-theme') ? "☀️" : "🌙";
+    });
+
+    // Status update
+    function updateStatus() {
+        const statusText = document.getElementById('status');
+        if (statusText) {
+            const hour = new Date().getHours();
+            
+            if (hour >= 9 && hour < 18) {
+                statusText.innerText = "Hozir: Yangi loyihalar ustida ishlayapman 🚀";
+            } else if (hour >= 18 && hour < 23) {
+                statusText.innerText = "Hozir: JavaScript o'rganmoqdaman 📚";
+            } else {
+                statusText.innerText = "Hozir: Dam olayotganman 😴";
+            }
+        }
+    }
+    setInterval(updateStatus, 1000);
+
+    // Discord nickname copy
+    const discordBtn = document.getElementById('discord-btn');
+    if(discordBtn) {
+        discordBtn.addEventListener('click', () => {
+            const nick = "bilol1bey";
+            navigator.clipboard.writeText(nick);
+            
+            const originalText = document.getElementById('discord-nick').innerText;
+            document.getElementById('discord-nick').innerText = "Nusxalandi! ✅";
+            
+            setTimeout(() => {
+                document.getElementById('discord-nick').innerText = originalText;
+            }, 2000);
+        });
+    }
+
+    // Back to top button
+    const backToTopBtn = document.getElementById("backToTop");
+    if (backToTopBtn) {
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 400) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        });
+
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    }
+
+    // Animation observer for other elements
+    const observerAnim = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    const hiddenElements = document.querySelectorAll('.banner, .adv-item, .good-card, .consult-item');
+    hiddenElements.forEach((el) => {
+        el.classList.add('hidden-animation');
+        observerAnim.observe(el);
+    });
+
+    // Contact form submission
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Send email using EmailJS
+            emailjs.sendForm('service_y1tjg0l', 'template_jwxi2yg', this, 'Zj_yJMKm7FpZ0qafw')
+                .then(function() {
+                    alert('Xabar muvaffaqiyatli yuborildi!');
+                    contactForm.reset();
+                }, function(error) {
+                    alert('Xato yuz berdi: ' + JSON.stringify(error));
+                });
+        });
+    }
 });
 
 
@@ -203,7 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const hiddenElements = document.querySelectorAll('.banner, .adv-item, .good-card, .consult-item');
     hiddenElements.forEach((el) => {
         el.classList.add('hidden-animation');
-        observer.observe(el);
+        observerAnim.observe(el);
     });
 });
 
