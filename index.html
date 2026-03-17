@@ -24,6 +24,13 @@
             <li><a href="#team">Jamoa</a></li>
             <li><a href="#contact">Aloqa</a></li>
             <li><a href="#links">Tarmoqlar</a></li>
+            <li class="lang-switcher desktop-lang">
+                <select id="lang-select">
+                    <option value="uz" selected>UZB</option>
+                    <option value="en">ENG</option>
+                    <option value="ru">RUS</option>
+                </select>
+            </li>
         </ul>
         
         <div class="menu-toggle" id="mobile-menu">
@@ -33,6 +40,15 @@
         </div>
     </div>
 </nav>
+
+<!-- Mobile language switcher, hidden by default, shown in hamburger menu -->
+<div class="mobile-lang-switcher" style="display:none;">
+    <select id="lang-select-mobile">
+        <option value="uz" selected>UZB</option>
+        <option value="en">ENG</option>
+        <option value="ru">RUS</option>
+    </select>
+</div>
 
 <div id="loader-wrapper">
     <div class="loader"></div>
